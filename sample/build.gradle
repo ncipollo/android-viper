@@ -1,4 +1,4 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
@@ -6,10 +6,11 @@ android {
     buildToolsVersion "25.0.0"
 
     defaultConfig {
+        applicationId "viper.sample"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName "0.1"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -20,10 +21,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
+    return void
 }
 
 dependencies {
