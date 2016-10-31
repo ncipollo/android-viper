@@ -35,4 +35,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     // Kotlin
     compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.4'
+    // Nucleus
+    compile 'info.android15.nucleus:nucleus:4.0.0'
 }
