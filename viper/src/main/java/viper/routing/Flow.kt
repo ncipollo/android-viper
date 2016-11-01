@@ -1,6 +1,6 @@
 package viper.routing
 
-import android.os.Parcelable
+import android.os.Bundle
 
 /**
  * A flow represents a route through an app. A flow will return the next screen the app
@@ -8,5 +8,5 @@ import android.os.Parcelable
  * Created by Nick Cipollo on 10/31/16.
  */
 interface Flow {
-    fun <T : Parcelable> nextScreen(action: Int, argument: T?): Screen
+    fun nextScreen(action: Int, arguments: Bundle): Screen
 }
