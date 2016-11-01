@@ -25,6 +25,15 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 }
+// Adding kotlin here to allow for local copy hack of library
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.4'
+    }
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

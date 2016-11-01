@@ -13,7 +13,7 @@ import viper.view.ViperActivity
  * layout and navigation.
  * Created by Nick Cipollo on 10/31/16.
  */
-class ActivityPresenter<View : ViperActivity<*>> : RxPresenter<View>() {
+open class ActivityPresenter<View : ViperActivity<*>> : RxPresenter<View>() {
     companion object {
         val SCREEN_SWITCH = 10000
     }
