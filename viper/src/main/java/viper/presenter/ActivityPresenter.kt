@@ -15,7 +15,7 @@ import viper.view.ViperActivity
  */
 open class ActivityPresenter<View : ViperActivity<*>> : RxPresenter<View>() {
     companion object {
-        val SCREEN_SWITCH = 10000
+        val SCREEN_SWITCH = 10001
     }
 
     private val router: Router?

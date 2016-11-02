@@ -10,7 +10,7 @@ import viper.view.ViperFragment
  * specific to the current use case displayed in the app.
  * Created by Nick Cipollo on 10/31/16.
  */
-class FragmentPresenter<View:ViperFragment<*>> : RxPresenter<View>() {
+open class FragmentPresenter<View:ViperFragment<*>> : RxPresenter<View>() {
     var activityPresenter: ActivityPresenter<*>? = null
 
     override fun onTakeView(view: View) {
