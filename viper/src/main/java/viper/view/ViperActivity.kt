@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import nucleus.factory.PresenterFactory
 import nucleus.factory.ReflectionPresenterFactory
-import nucleus.presenter.Presenter
+import nucleus.presenter.RxPresenter
 import nucleus.view.PresenterLifecycleDelegate
 import nucleus.view.ViewWithPresenter
 import viper.Viper
@@ -17,7 +17,7 @@ import viper.routing.Screen
  * AppCompatActivity, as opposed to the standard Activity class.
  * Created by Nick Cipollo on 10/31/16.
  */
-open class ViperActivity<P : Presenter<*>> : AppCompatActivity(), ViewWithPresenter<P> {
+open class ViperActivity<P : RxPresenter<*>> : AppCompatActivity(), ViewWithPresenter<P> {
     private val PRESENTER_STATE_KEY = "presenter_state"
     private val presenterDelegate =
             PresenterLifecycleDelegate(ReflectionPresenterFactory.fromViewClass<P>(javaClass))
