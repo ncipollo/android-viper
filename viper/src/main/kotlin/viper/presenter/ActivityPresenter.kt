@@ -6,6 +6,7 @@ import rx.Observable
 import viper.Viper
 import viper.routing.Router
 import viper.routing.Screen
+import viper.view.ActivityView
 import viper.view.ViperActivity
 
 /**
@@ -13,7 +14,7 @@ import viper.view.ViperActivity
  * layout and navigation.
  * Created by Nick Cipollo on 10/31/16.
  */
-open class ActivityPresenter<View : ViperActivity<*>> : RxPresenter<View>() {
+open class ActivityPresenter<View : ActivityView> : RxPresenter<View>() {
     companion object {
         val SCREEN_SWITCH = 10001
     }

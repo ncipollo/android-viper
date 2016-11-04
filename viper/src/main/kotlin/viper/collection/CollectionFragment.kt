@@ -9,7 +9,7 @@ import viper.view.ViperFragment
  * A generic collection fragment is driven by a collection presenter.
  * Created by Nick Cipollo on 11/2/16.
  */
-abstract class CollectionFragment<P : FragmentPresenter<*>> : CollectionView,
+abstract class CollectionFragment<P : CollectionPresenter<*,*>> : CollectionView,
         ViperFragment<P>() {
     lateinit var adapter: CollectionAdapter<CollectionPresenter<*, *>>
     var actionSub: Subscription? = null

@@ -17,7 +17,7 @@ import viper.routing.Screen
  * AppCompatActivity, as opposed to the standard Activity class.
  * Created by Nick Cipollo on 10/31/16.
  */
-open class ViperActivity<P : RxPresenter<*>> : AppCompatActivity(), ViewWithPresenter<P> {
+open class ViperActivity<P : RxPresenter<*>> : AppCompatActivity(), ViewWithPresenter<P>, ActivityView {
     private val PRESENTER_STATE_KEY = "presenter_state"
     private val presenterDelegate =
             PresenterLifecycleDelegate(ReflectionPresenterFactory.fromViewClass<P>(javaClass))
@@ -34,7 +34,7 @@ open class ViperActivity<P : RxPresenter<*>> : AppCompatActivity(), ViewWithPres
      * Triggers a screen switch which may start a new activity and / or update the activities
      * fragments.
      */
-    fun switchScreen(newScreen: Screen) {
+    override fun switchScreen(newScreen: Screen) {
         if (screen?.activity != newScreen.activity && newScreen.activity != null) {
             router?.switchActivity(this,newScreen)
             return
