@@ -11,15 +11,15 @@ import viper.view.ViperFragment
  */
 abstract class CollectionFragment<P : CollectionPresenter<*,*>> : CollectionView,
         ViperFragment<P>() {
-    lateinit var adapter: CollectionAdapter<CollectionPresenter<*, *>>
+    lateinit var adapter: CollectionAdapter<P>
     var actionSub: Subscription? = null
 
-    abstract fun createAdapter(): CollectionAdapter<CollectionPresenter<*, *>>
+    abstract fun createAdapter(): CollectionAdapter<P>
 
     override fun onCreate(bundle: Bundle?) {
         super.onCreate(bundle)
         adapter = createAdapter()
-        adapter.presenter = presenter as? CollectionPresenter<*, *>
+        adapter.presenter = presenter
         actionSub = adapter.actionObserver.subscribe { sendItemAction(it.actionId,it.itemIndex) }
     }
 
