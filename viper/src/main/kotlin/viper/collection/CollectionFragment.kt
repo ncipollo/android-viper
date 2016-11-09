@@ -2,7 +2,6 @@ package viper.collection
 
 import android.os.Bundle
 import rx.Subscription
-import viper.presenter.FragmentPresenter
 import viper.view.ViperFragment
 
 /**
