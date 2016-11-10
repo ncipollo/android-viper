@@ -30,43 +30,22 @@ open class ViperActivity<P : RxPresenter<*>> : AppCompatActivity(), ViewWithPres
     val activityPresenter: ActivityPresenter<*>?
         get() = presenter as? ActivityPresenter<*>
 
-    /**
-     * Triggers a screen switch which may start a new activity and / or update the activities
-     * fragments.
-     */
-    override fun switchScreen(newScreen: Screen) {
-        if (screen?.activity != newScreen.activity && newScreen.activity != null) {
-            router?.switchActivity(this,newScreen)
-            return
-        }
-        val fragments = router?.createFragments(newScreen)
-        if (fragments != null) {
-            updateFragments(fragments)
-        }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    protected fun updateFragments(fragments: Map<String,ViperFragment<*>>) {
-        // Subclasses will handle
-    }
-
-    override fun setPresenterFactory(presenterFactory: PresenterFactory<P>?) {
-        presenterDelegate.presenterFactory = presenterFactory
-    }
-
-    override fun getPresenter(): P = presenterDelegate.presenter
-
-    override fun getPresenterFactory(): PresenterFactory<P>? = presenterDelegate.presenterFactory
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Load the screen if it exists
         intent?.extras?.getBundle("screen")?.let {
             screen = Screen(it)
         }
+        // If we don't have a screen this may be the initial activity started in the app. Try
+        // and create an initial screen.
+        if (screen == null) {
+            screen = activityPresenter?.createInitialScreen()
+        }
         if (savedInstanceState != null) {
             presenterDelegate.onRestoreInstanceState(savedInstanceState.getBundle(PRESENTER_STATE_KEY))
         }
+        // Setup the fragments assuming we have a screen.
+        setupFragments()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -88,4 +67,39 @@ open class ViperActivity<P : RxPresenter<*>> : AppCompatActivity(), ViewWithPres
         super.onDestroy()
         presenterDelegate.onDestroy(!isChangingConfigurations)
     }
+
+    /**
+     * Triggers a screen switch which may start a new activity and / or update the activities
+     * fragments.
+     */
+    override fun switchScreen(newScreen: Screen) {
+        if (screen?.activity != newScreen.activity && newScreen.activity != null) {
+            router?.switchActivity(this, newScreen)
+            return
+        }
+        screen = newScreen
+        setupFragments()
+    }
+
+    fun setupFragments() {
+        screen?.let {
+            val fragments = router?.createFragments(it)
+            if (fragments != null) {
+                updateFragments(fragments)
+            }
+        }
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    open protected fun updateFragments(fragments: Map<String, ViperFragment<*>>) {
+        // Subclasses will handle
+    }
+
+    override fun setPresenterFactory(presenterFactory: PresenterFactory<P>?) {
+        presenterDelegate.presenterFactory = presenterFactory
+    }
+
+    override fun getPresenter(): P = presenterDelegate.presenter
+
+    override fun getPresenterFactory(): PresenterFactory<P>? = presenterDelegate.presenterFactory
 }

@@ -8,5 +8,5 @@ import android.os.Bundle
  * Created by Nick Cipollo on 10/31/16.
  */
 interface Flow {
-    fun nextScreen(action: Int, arguments: Bundle): Screen
+    fun nextScreen(action: Int, arguments: Bundle): Screen?
 }

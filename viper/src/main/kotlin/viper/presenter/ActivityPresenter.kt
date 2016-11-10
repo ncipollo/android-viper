@@ -19,12 +19,20 @@ open class ActivityPresenter<View : ActivityView> : RxPresenter<View>() {
         val SCREEN_SWITCH = 10001
     }
 
-    private val router: Router?
+    protected val router: Router?
         get() = Viper.router
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
         router?.interactorInjector?.injectInteractor(this)
+    }
+
+    /**
+     * The initial activity can override this to provide the initial screen object.
+     */
+    open fun createInitialScreen(): Screen? {
+        // Subclasses override
+        return null
     }
 
     /**

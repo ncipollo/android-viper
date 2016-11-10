@@ -15,7 +15,7 @@ import viper.view.FragmentView
 open class FragmentPresenter<View:FragmentView> : RxPresenter<View>() {
     var activityPresenter: ActivityPresenter<*>? = null
 
-    private val router: Router?
+    protected val router: Router?
         get() = Viper.router
 
     override fun onCreate(savedState: Bundle?) {
