@@ -1,5 +1,6 @@
 package viper.routing
 
+import android.os.Bundle
 import viper.interactor.InteractorInjector
 import viper.view.ViperActivity
 import viper.view.ViperFragment
@@ -22,6 +23,13 @@ class Router(val activityFactory: ActivityFactory,
     }
 
     fun createFragments(screen: Screen) : Map<String,ViperFragment<*>> {
-        return fragmentFactory.createFragments(screen) ?: mapOf()
+        val fragments = fragmentFactory.createFragments(screen) ?: mapOf()
+        val screenBundle = screen.toBundle()
+        for ((key,fragment) in fragments) {
+            val args = Bundle()
+            args.putBundle("screen",screenBundle)
+            fragment.arguments = args
+        }
+        return fragments
     }
 }
