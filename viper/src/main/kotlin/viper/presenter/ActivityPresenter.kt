@@ -22,6 +22,11 @@ open class ActivityPresenter<View : ActivityView> : RxPresenter<View>() {
     private val router: Router?
         get() = Viper.router
 
+    override fun onCreate(savedState: Bundle?) {
+        super.onCreate(savedState)
+        router?.interactorInjector?.injectInteractor(this)
+    }
+
     /**
      * Triggers a screen switch which may start a new activity and / or update the activity's
      * fragments.

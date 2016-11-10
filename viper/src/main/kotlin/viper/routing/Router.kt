@@ -1,5 +1,6 @@
 package viper.routing
 
+import viper.interactor.InteractorInjector
 import viper.view.ViperActivity
 import viper.view.ViperFragment
 
@@ -9,6 +10,7 @@ import viper.view.ViperFragment
  */
 class Router(val activityFactory: ActivityFactory,
              val fragmentFactory: FragmentFactory,
+             val interactorInjector: InteractorInjector,
              var flow : Flow?) {
 
     fun switchActivity(currentActivity: ViperActivity<*>,screen: Screen) {

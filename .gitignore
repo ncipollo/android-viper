@@ -41,7 +41,7 @@ captures/
 .idea/workspace.xml
 .idea/libraries
 .idea/gradle.xml
-
+.idea/dictionaries/
 # Keystore files
 *.jks
 

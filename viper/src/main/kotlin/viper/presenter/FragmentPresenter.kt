@@ -2,6 +2,8 @@ package viper.presenter
 
 import android.os.Bundle
 import nucleus.presenter.RxPresenter
+import viper.Viper
+import viper.routing.Router
 import viper.routing.Screen
 import viper.view.FragmentView
 
@@ -12,6 +14,14 @@ import viper.view.FragmentView
  */
 open class FragmentPresenter<View:FragmentView> : RxPresenter<View>() {
     var activityPresenter: ActivityPresenter<*>? = null
+
+    private val router: Router?
+        get() = Viper.router
+
+    override fun onCreate(savedState: Bundle?) {
+        super.onCreate(savedState)
+        router?.interactorInjector?.injectInteractor(this)
+    }
 
     override fun onTakeView(view: View) {
         super.onTakeView(view)

@@ -1,5 +1,6 @@
 package viper
 
+import viper.interactor.InteractorInjector
 import viper.routing.ActivityFactory
 import viper.routing.Flow
 import viper.routing.FragmentFactory
@@ -13,7 +14,8 @@ object Viper {
     internal var router : Router? = null
     fun setupRouter(activityFactory: ActivityFactory,
                     fragmentFactory: FragmentFactory,
+                    interactorInjector: InteractorInjector,
                     flow: Flow? = null) {
-        router = Router(activityFactory,fragmentFactory,flow)
+        router = Router(activityFactory,fragmentFactory,interactorInjector,flow)
     }
 }
