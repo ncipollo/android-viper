@@ -1,51 +1,62 @@
 package viper.view
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import nucleus.factory.PresenterFactory
 import nucleus.factory.ReflectionPresenterFactory
 import nucleus.presenter.RxPresenter
 import nucleus.view.PresenterLifecycleDelegate
 import nucleus.view.ViewWithPresenter
-import viper.Viper
 import viper.presenter.ActivityPresenter
-import viper.routing.Router
-import viper.routing.Screen
+import viper.routing.Flow
 
 /**
  * Base viper activity. This is a nucleus compatible activity which is based upon the
  * AppCompatActivity, as opposed to the standard Activity class.
  * Created by Nick Cipollo on 10/31/16.
  */
-open class ViperActivity<P : RxPresenter<*>> : AppCompatActivity(), ViewWithPresenter<P>, ActivityView {
+abstract class ViperActivity<P : RxPresenter<*>>
+    : AppCompatActivity(), ViewWithPresenter<P>, ActivityView {
     private val PRESENTER_STATE_KEY = "presenter_state"
     private val presenterDelegate =
             PresenterLifecycleDelegate(ReflectionPresenterFactory.fromViewClass<P>(javaClass))
-    protected var screen: Screen? = null
-    private val router: Router?
-        get() = Viper.router
+    lateinit var flow: Flow
+        private set
     /**
      * Returns an activity presenter if one exists and is assigned as this activity's presenter.
      */
     val activityPresenter: ActivityPresenter<*>?
         get() = presenter as? ActivityPresenter<*>
 
+    /**
+     * Subclasses must override and create a flow for this activity.
+     */
+    abstract fun createFlow(): Flow
+
+    /**
+     * Sets the activity's fragments. By default this will add all fragments into a replace
+     * fragment transaction, using each key as the resource Id. Subclasses may override to
+     * customize this behavior.
+     */
+    open fun setFragments(fragments: Map<Int, Fragment>, initialFragments: Boolean) {
+        val transaction = supportFragmentManager?.beginTransaction()
+        for ((id, fragment) in fragments) {
+            transaction?.replace(id, fragment)
+        }
+        if (initialFragments) {
+            transaction?.addToBackStack(null)
+        }
+        transaction?.commit()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Load the screen if it exists
-        intent?.extras?.getBundle("screen")?.let {
-            screen = Screen(it)
-        }
-        // If we don't have a screen this may be the initial activity started in the app. Try
-        // and create an initial screen.
-        if (screen == null) {
-            screen = activityPresenter?.createInitialScreen()
-        }
         if (savedInstanceState != null) {
             presenterDelegate.onRestoreInstanceState(savedInstanceState.getBundle(PRESENTER_STATE_KEY))
         }
-        // Setup the fragments assuming we have a screen.
-        setupFragments()
+        flow = createFlow()
+        setFragments(flow.initialFragments,false)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -68,31 +79,12 @@ open class ViperActivity<P : RxPresenter<*>> : AppCompatActivity(), ViewWithPres
         presenterDelegate.onDestroy(!isChangingConfigurations)
     }
 
-    /**
-     * Triggers a screen switch which may start a new activity and / or update the activities
-     * fragments.
-     */
-    override fun switchScreen(newScreen: Screen) {
-        if (screen?.activity != newScreen.activity && newScreen.activity != null) {
-            router?.switchActivity(this, newScreen)
+    override fun moveToNextScreen(screenId: Int, arguments: Bundle) {
+        flow.intentForScreen(screenId,arguments,this)?.let {
+            startActivity(it,arguments)
             return
         }
-        screen = newScreen
-        setupFragments()
-    }
-
-    fun setupFragments() {
-        screen?.let {
-            val fragments = router?.createFragments(it)
-            if (fragments != null) {
-                updateFragments(fragments)
-            }
-        }
-    }
-
-    @Suppress("UNUSED_PARAMETER")
-    open protected fun updateFragments(fragments: Map<String, ViperFragment<*>>) {
-        // Subclasses will handle
+        setFragments(flow.fragmentsForScreen(screenId,arguments),true)
     }
 
     override fun setPresenterFactory(presenterFactory: PresenterFactory<P>?) {

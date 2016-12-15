@@ -38,7 +38,7 @@ open class ViperFragment<P : RxPresenter<*>> : FragmentView, ViewWithPresenter<P
 
     override fun onSaveInstanceState(bundle: Bundle?) {
         super.onSaveInstanceState(bundle)
-        bundle!!.putBundle(PRESENTER_STATE_KEY, presenterDelegate.onSaveInstanceState())
+        bundle?.putBundle(PRESENTER_STATE_KEY, presenterDelegate.onSaveInstanceState())
     }
 
     override fun onResume() {

@@ -1,11 +1,11 @@
 package viper.view
 
-import viper.routing.Screen
+import android.os.Bundle
 
 /**
  * A view which represents an activity.
  * Created by Nick Cipollo on 11/4/16.
  */
 interface ActivityView {
-    fun switchScreen(newScreen: Screen)
+    fun moveToNextScreen(screenId: Int, arguments: Bundle)
 }
