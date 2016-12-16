@@ -1,4 +1,4 @@
-package viper.view
+package viper.view.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -7,7 +7,8 @@ import nucleus.factory.ReflectionPresenterFactory
 import nucleus.presenter.RxPresenter
 import nucleus.view.PresenterLifecycleDelegate
 import nucleus.view.ViewWithPresenter
-import viper.presenter.ActivityPresenter
+import viper.presenters.ActivityPresenter
+import viper.view.activities.ViperActivity
 
 /**
  * Base Viper fragment. Based upon a NucleusFragment.

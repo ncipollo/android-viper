@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import viper.view.ViperActivity
-import viper.view.ViperFragment
+import viper.view.activities.ViperActivity
+import viper.view.fragments.ViperFragment
 
 /**
  * A Flow represents a route through an activity. The flow defines the initial fragment set and

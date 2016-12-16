@@ -1,4 +1,4 @@
-package viper.view
+package viper.view.activities
 
 import android.os.Bundle
 

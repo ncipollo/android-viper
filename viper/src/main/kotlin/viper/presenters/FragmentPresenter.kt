@@ -1,8 +1,8 @@
-package viper.presenter
+package viper.presenters
 
 import android.os.Bundle
 import nucleus.presenter.RxPresenter
-import viper.view.FragmentView
+import viper.view.fragments.FragmentView
 
 /**
  * A presenter which is associated with a fragment. This will typically manage screen interactions

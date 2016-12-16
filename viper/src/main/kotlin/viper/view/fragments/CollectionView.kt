@@ -1,6 +1,4 @@
-package viper.collection
-
-import viper.view.FragmentView
+package viper.view.fragments
 
 /**
  * Represents a view which can receive collection updates.

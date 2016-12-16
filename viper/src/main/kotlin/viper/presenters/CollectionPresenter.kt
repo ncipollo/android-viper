@@ -1,7 +1,7 @@
-package viper.collection
+package viper.presenters
 
 import rx.Observable
-import viper.presenter.FragmentPresenter
+import viper.view.fragments.CollectionView
 
 /**
  * A generic presenter which represents a collection of items on the screen.

@@ -1,6 +1,6 @@
-package viper.view
+package viper.view.fragments
 
-import viper.presenter.ActivityPresenter
+import viper.presenters.ActivityPresenter
 
 /**
  * A view which represents a fragment.

@@ -1,9 +1,9 @@
-package viper.presenter
+package viper.presenters
 
 import android.os.Bundle
 import nucleus.presenter.RxPresenter
 import rx.Observable
-import viper.view.ActivityView
+import viper.view.activities.ActivityView
 
 /**
  * A Presenter which is associated with an activity. Generally this will manage high level

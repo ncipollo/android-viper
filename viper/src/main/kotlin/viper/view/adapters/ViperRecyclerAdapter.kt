@@ -1,7 +1,9 @@
-package viper.collection
+package viper.view.adapters
 
 import android.support.v7.widget.RecyclerView
-import viper.presenter.ActivityPresenter
+import viper.presenters.CollectionPresenter
+import viper.presenters.ActivityPresenter
+import viper.view.adapters.CollectionAdapter
 
 /**
  * A recycler adapter which removes some of the boiler plate needed to bind the presenter
