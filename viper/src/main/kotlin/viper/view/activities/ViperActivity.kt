@@ -5,30 +5,24 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import nucleus.factory.PresenterFactory
 import nucleus.factory.ReflectionPresenterFactory
-import nucleus.presenter.RxPresenter
 import nucleus.view.PresenterLifecycleDelegate
 import nucleus.view.ViewWithPresenter
 import viper.presenters.ActivityPresenter
 import viper.routing.Flow
-import viper.view.activities.ActivityView
+import viper.routing.TransitionOptions
 
 /**
  * Base viper activity. This is a nucleus compatible activity which is based upon the
  * AppCompatActivity, as opposed to the standard Activity class.
  * Created by Nick Cipollo on 10/31/16.
  */
-abstract class ViperActivity<P : RxPresenter<*>>
+abstract class ViperActivity<P : ActivityPresenter<*>>
     : AppCompatActivity(), ViewWithPresenter<P>, ActivityView {
     private val PRESENTER_STATE_KEY = "presenter_state"
     private val presenterDelegate =
             PresenterLifecycleDelegate(ReflectionPresenterFactory.fromViewClass<P>(javaClass))
     lateinit var flow: Flow
         private set
-    /**
-     * Returns an activity presenter if one exists and is assigned as this activity's presenter.
-     */
-    val activityPresenter: ActivityPresenter<*>?
-        get() = presenter as? ActivityPresenter<*>
 
     /**
      * Subclasses must override and create a flow for this activity.
@@ -40,13 +34,28 @@ abstract class ViperActivity<P : RxPresenter<*>>
      * fragment transaction, using each key as the resource Id. Subclasses may override to
      * customize this behavior.
      */
-    open fun setFragments(fragments: Map<Int, Fragment>, initialFragments: Boolean) {
+    open fun setFragments(fragments: Map<Int, Fragment>,
+                          options: TransitionOptions,
+                          initialFragments: Boolean) {
         val transaction = supportFragmentManager?.beginTransaction()
+        if (!initialFragments && transaction != null) {
+            if (options.shouldUseLollipopTransitions) {
+                fragments.values.forEach {
+                    options.lollipopTransitioner?.invoke(it)
+                }
+            } else {
+                transaction.setCustomAnimations(options.enterAnimation,
+                        options.exitAnimation,
+                        options.enterPopAnimation,
+                        options.exitPopAnimation)
+            }
+            if (options.addToBackStack) {
+                transaction.addToBackStack(null)
+            }
+            options.transactionCustomizer?.invoke(transaction)
+        }
         for ((id, fragment) in fragments) {
             transaction?.replace(id, fragment)
-        }
-        if (initialFragments) {
-            transaction?.addToBackStack(null)
         }
         transaction?.commit()
     }
@@ -57,7 +66,11 @@ abstract class ViperActivity<P : RxPresenter<*>>
             presenterDelegate.onRestoreInstanceState(savedInstanceState.getBundle(PRESENTER_STATE_KEY))
         }
         flow = createFlow()
-        setFragments(flow.initialFragments,false)
+    }
+
+    override fun onContentChanged() {
+        super.onContentChanged()
+        setFragments(flow.initialFragments, TransitionOptions.default, true)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -80,12 +93,14 @@ abstract class ViperActivity<P : RxPresenter<*>>
         presenterDelegate.onDestroy(!isChangingConfigurations)
     }
 
-    override fun moveToNextScreen(screenId: Int, arguments: Bundle) {
-        flow.intentForScreen(screenId,arguments,this)?.let {
-            startActivity(it,arguments)
+    override fun moveToNextScreen(screenId: Int, arguments: Bundle, options: TransitionOptions?) {
+        flow.intentForScreen(screenId, arguments, this)?.let {
+            startActivity(it, arguments)
             return
         }
-        setFragments(flow.fragmentsForScreen(screenId,arguments),true)
+        setFragments(flow.fragmentsForScreen(screenId, Bundle(arguments)),
+                options ?: flow.defaultTransitionOptions,
+                false)
     }
 
     override fun setPresenterFactory(presenterFactory: PresenterFactory<P>?) {

@@ -35,5 +35,11 @@ interface Flow {
      */
     fun fragmentsForScreen(screen: Int, args: Bundle): Map<Int, Fragment>
 
+    /**
+     * Returns the transition options which are used by default during a screen switch. Individual
+     * presenters may override these options when calling the moveToNextScreen method.
+     */
+    val defaultTransitionOptions: TransitionOptions
+        get() = TransitionOptions.default
 }
 

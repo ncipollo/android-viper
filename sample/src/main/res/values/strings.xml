@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Viper Sample</string>
+    <string name="form_user">User</string>
+    <string name="button_repos">Repos</string>
 </resources>

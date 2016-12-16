@@ -3,6 +3,7 @@ package viper.presenters
 import android.os.Bundle
 import nucleus.presenter.RxPresenter
 import rx.Observable
+import viper.routing.TransitionOptions
 import viper.view.activities.ActivityView
 
 /**
@@ -14,12 +15,27 @@ open class ActivityPresenter<View : ActivityView> : RxPresenter<View>() {
     companion object {
         val SCREEN_SWITCH = 10001
     }
+
     /**
      * Moves to the next screen in the flow.
      */
-    fun moveToNextScreen(screenId: Int, arguments: Bundle) {
+    fun moveToNextScreen(screenId: Int, arguments: Bundle, options: TransitionOptions? = null) {
+        stop(SCREEN_SWITCH)
         restartableFirst(SCREEN_SWITCH,
-                { Observable.just(Pair(screenId, arguments)) },
-                { view, params -> view?.moveToNextScreen(params.first, params.second) })
+                {
+                    Observable.just(ScreenSwitchParams(screenId,
+                            arguments,
+                            options))
+                },
+                { view, params ->
+                    view?.moveToNextScreen(params.screenId,
+                            params.arguments,
+                            params.options)
+                })
+        start(SCREEN_SWITCH)
     }
+
+    data class ScreenSwitchParams(val screenId: Int,
+                                  val arguments: Bundle,
+                                  val options: TransitionOptions?)
 }

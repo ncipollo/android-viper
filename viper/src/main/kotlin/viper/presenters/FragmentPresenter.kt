@@ -2,6 +2,7 @@ package viper.presenters
 
 import android.os.Bundle
 import nucleus.presenter.RxPresenter
+import viper.routing.TransitionOptions
 import viper.view.fragments.FragmentView
 
 /**
@@ -25,7 +26,7 @@ open class FragmentPresenter<View : FragmentView> : RxPresenter<View>() {
     /**
      * Moves to the next screen in the flow.
      */
-    fun moveToNextScreen(screenId: Int, arguments: Bundle) {
-        activityPresenter?.moveToNextScreen(screenId, arguments)
+    fun moveToNextScreen(screenId: Int, arguments: Bundle, options: TransitionOptions? = null) {
+        activityPresenter?.moveToNextScreen(screenId, arguments,options)
     }
 }

@@ -18,7 +18,7 @@ open class ViperFragment<P : RxPresenter<*>> : FragmentView, ViewWithPresenter<P
     val viperActivity: ViperActivity<*>?
         get() = activity as? ViperActivity<*>
     override val activityPresenter: ActivityPresenter<*>?
-        get() = viperActivity?.activityPresenter
+        get() = viperActivity?.presenter
 
     private val PRESENTER_STATE_KEY = "presenter_state"
     private val presenterDelegate = PresenterLifecycleDelegate(ReflectionPresenterFactory.fromViewClass<P>(javaClass))

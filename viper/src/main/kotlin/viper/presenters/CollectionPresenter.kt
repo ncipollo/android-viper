@@ -11,6 +11,7 @@ abstract class CollectionPresenter<View : CollectionView, out ListItem> : Fragme
     companion object {
         val COLLECTION_UPDATE = 10001
         val ITEM_UPDATE = 10002
+        val ACTION_ITEM_SELECTED = 10003
     }
 
     abstract val count: Int
