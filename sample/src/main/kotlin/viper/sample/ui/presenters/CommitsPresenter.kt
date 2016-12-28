@@ -8,7 +8,7 @@ import viper.view.fragments.CollectionView
  * Created by Nick Cipollo on 12/24/16.
  */
 class CommitsPresenter : CollectionPresenter<CollectionView, CommitListItem>() {
-    val commitList = listOf<CommitListItem>(CommitListItem("Nick","Commit 1"),
+    val commitList = listOf(CommitListItem("Nick","Commit 1"),
             CommitListItem("Nick","Commit 2"))
     override val count: Int
         get() = commitList.size

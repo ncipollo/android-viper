@@ -11,7 +11,7 @@ import viper.view.fragments.CollectionView
  */
 class RepositoryPresenter
     : CollectionPresenter<CollectionView, RepoListItem>() {
-    val repoList = listOf<RepoListItem>(RepoListItem("Repo 1", "Android app"),
+    val repoList = listOf(RepoListItem("Repo 1", "Android app"),
             RepoListItem("Repo 2", "iOS App"))
     override val count: Int
         get() = repoList.size

@@ -58,9 +58,6 @@ class ViperRecyclerAdapter<ListItem,
  * associate the presenter item with the view.
  */
 open class ViperViewHolder<in ListItem>(val view: View) : RecyclerView.ViewHolder(view) {
-    companion object {
-        val ACTION_ITEM_SELECTED = 1000
-    }
     internal lateinit var actionSubject: PublishSubject<AdapterAction>
     constructor(layoutId: Int, parent: ViewGroup) : this(LayoutInflater.from(parent.context)
             .inflate(layoutId, parent, false))

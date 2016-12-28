@@ -1,6 +1,5 @@
 package viper.sample.ui.activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import nucleus.factory.RequiresPresenter
 import viper.presenters.ActivityPresenter

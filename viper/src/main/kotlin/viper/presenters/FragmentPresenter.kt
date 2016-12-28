@@ -2,7 +2,6 @@ package viper.presenters
 
 import android.os.Bundle
 import nucleus.presenter.RxPresenter
-import viper.routing.TransitionOptions
 import viper.view.fragments.FragmentView
 
 /**

@@ -3,7 +3,6 @@ package viper.presenters
 import android.os.Bundle
 import nucleus.presenter.RxPresenter
 import rx.Observable
-import viper.routing.TransitionOptions
 import viper.view.activities.ActivityView
 
 /**
