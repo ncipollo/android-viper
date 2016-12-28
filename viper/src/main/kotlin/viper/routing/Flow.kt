@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.transition.Transition
 import viper.view.activities.ViperActivity
 import viper.view.fragments.ViperFragment
 
@@ -36,10 +37,12 @@ interface Flow {
     fun fragmentsForScreen(screen: Int, args: Bundle): Map<Int, Fragment>
 
     /**
-     * Returns the transition options which are used by default during a screen switch. Individual
-     * presenters may override these options when calling the moveToNextScreen method.
+     * Returns the the options to be used with the current screen transition. Implementing
+     * classes may override to customize transition behavior. By default this will return
+     * TransitionOptions.default
      */
-    val defaultTransitionOptions: TransitionOptions
-        get() = TransitionOptions.default
+    fun optionsForScreenTransition(screen: Int, args: Bundle): TransitionOptions {
+        return TransitionOptions.default
+    }
 }
 

@@ -21,7 +21,7 @@ class RepositoryPresenter
     override fun onItemAction(actionId: Int, itemIndex: Int) {
         val args = Bundle()
         args.putString(SampleFlow.ARGS_REPO,repoList[itemIndex].title)
-        moveToNextScreen(SampleFlow.SCREEN_COMMITS,args)
+        moveToNextScreen(SampleFlow.SCREEN_COMMITS, args)
     }
 }
 

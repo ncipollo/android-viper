@@ -14,6 +14,6 @@ class UserPresenter : FragmentPresenter<UserFragment>() {
     fun selectUser(user: String) {
         val args = Bundle()
         args.putString(SampleFlow.ARGS_USER,user)
-        moveToNextScreen(SampleFlow.SCREEN_REPOS,args)
+        moveToNextScreen(SampleFlow.SCREEN_REPOS, args)
     }
 }

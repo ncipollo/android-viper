@@ -19,23 +19,19 @@ open class ActivityPresenter<View : ActivityView> : RxPresenter<View>() {
     /**
      * Moves to the next screen in the flow.
      */
-    fun moveToNextScreen(screenId: Int, arguments: Bundle, options: TransitionOptions? = null) {
+    fun moveToNextScreen(screenId: Int, arguments: Bundle) {
         stop(SCREEN_SWITCH)
         restartableFirst(SCREEN_SWITCH,
                 {
-                    Observable.just(ScreenSwitchParams(screenId,
-                            arguments,
-                            options))
+                    Observable.just(ScreenSwitchParams(screenId, arguments))
                 },
                 { view, params ->
                     view?.moveToNextScreen(params.screenId,
-                            params.arguments,
-                            params.options)
+                            params.arguments)
                 })
         start(SCREEN_SWITCH)
     }
 
     data class ScreenSwitchParams(val screenId: Int,
-                                  val arguments: Bundle,
-                                  val options: TransitionOptions?)
+                                  val arguments: Bundle)
 }

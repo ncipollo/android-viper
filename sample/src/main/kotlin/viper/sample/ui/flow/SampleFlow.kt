@@ -26,23 +26,24 @@ class SampleFlow : Flow {
     override val initialFragments: Map<Int, Fragment>
         get() = mapOf(R.id.content to UserFragment())
 
-    override val defaultTransitionOptions: TransitionOptions
-        get() = TransitionOptions(enterAnimation = R.anim.slide_in_right,
+    override fun optionsForScreenTransition(screen: Int, args: Bundle): TransitionOptions {
+        return TransitionOptions(enterAnimation = R.anim.slide_in_right,
                 exitAnimation = R.anim.slide_out_left,
                 enterPopAnimation = R.anim.slide_in_left,
                 exitPopAnimation = R.anim.slide_out_right)
+    }
 
     override fun intentForScreen(screenId: Int, args: Bundle, context: Context): Intent? {
         return null // We only have a single activity.
     }
 
     override fun fragmentsForScreen(screen: Int, args: Bundle): Map<Int, Fragment> {
-        val fragment = when(screen) {
+        val fragment = when (screen) {
             SCREEN_REPOS -> RepositoryFragment()
             SCREEN_COMMITS -> CommitsFragment()
             else -> null
         }
-        if(fragment != null) {
+        if (fragment != null) {
             fragment.arguments = args
             return mapOf(R.id.content to fragment)
         }

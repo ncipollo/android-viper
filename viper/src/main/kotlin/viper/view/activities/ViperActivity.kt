@@ -35,10 +35,9 @@ abstract class ViperActivity<P : ActivityPresenter<*>>
      * customize this behavior.
      */
     open fun setFragments(fragments: Map<Int, Fragment>,
-                          options: TransitionOptions,
-                          initialFragments: Boolean) {
+                          options: TransitionOptions? = null) {
         val transaction = supportFragmentManager?.beginTransaction()
-        if (!initialFragments && transaction != null) {
+        if (options != null && transaction != null) {
             if (options.shouldUseLollipopTransitions) {
                 fragments.values.forEach {
                     options.lollipopTransitioner?.invoke(it)
@@ -70,7 +69,7 @@ abstract class ViperActivity<P : ActivityPresenter<*>>
 
     override fun onContentChanged() {
         super.onContentChanged()
-        setFragments(flow.initialFragments, TransitionOptions.default, true)
+        setFragments(flow.initialFragments)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -93,14 +92,14 @@ abstract class ViperActivity<P : ActivityPresenter<*>>
         presenterDelegate.onDestroy(!isChangingConfigurations)
     }
 
-    override fun moveToNextScreen(screenId: Int, arguments: Bundle, options: TransitionOptions?) {
+    override fun moveToNextScreen(screenId: Int, arguments: Bundle) {
         flow.intentForScreen(screenId, arguments, this)?.let {
             startActivity(it, arguments)
             return
         }
-        setFragments(flow.fragmentsForScreen(screenId, Bundle(arguments)),
-                options ?: flow.defaultTransitionOptions,
-                false)
+        val args = Bundle(arguments)
+        setFragments(flow.fragmentsForScreen(screenId, args),
+                flow.optionsForScreenTransition(screenId, args))
     }
 
     override fun setPresenterFactory(presenterFactory: PresenterFactory<P>?) {

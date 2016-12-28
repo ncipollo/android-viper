@@ -26,7 +26,7 @@ open class FragmentPresenter<View : FragmentView> : RxPresenter<View>() {
     /**
      * Moves to the next screen in the flow.
      */
-    fun moveToNextScreen(screenId: Int, arguments: Bundle, options: TransitionOptions? = null) {
-        activityPresenter?.moveToNextScreen(screenId, arguments,options)
+    fun moveToNextScreen(screenId: Int, arguments: Bundle) {
+        activityPresenter?.moveToNextScreen(screenId, arguments)
     }
 }
