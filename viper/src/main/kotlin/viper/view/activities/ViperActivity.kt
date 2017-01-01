@@ -1,8 +1,11 @@
 package viper.view.activities
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.AttributeSet
+import android.view.View
 import nucleus.factory.PresenterFactory
 import nucleus.factory.ReflectionPresenterFactory
 import nucleus.view.PresenterLifecycleDelegate
@@ -23,6 +26,7 @@ abstract class ViperActivity<P : ActivityPresenter<*>>
             PresenterLifecycleDelegate(ReflectionPresenterFactory.fromViewClass<P>(javaClass))
     lateinit var flow: Flow
         private set
+    private var needsInitialFragments = false
 
     /**
      * Subclasses must override and create a flow for this activity.
@@ -61,20 +65,23 @@ abstract class ViperActivity<P : ActivityPresenter<*>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        needsInitialFragments = savedInstanceState == null
         if (savedInstanceState != null) {
             presenterDelegate.onRestoreInstanceState(savedInstanceState.getBundle(PRESENTER_STATE_KEY))
         }
         flow = createFlow()
     }
 
-    override fun onContentChanged() {
-        super.onContentChanged()
-        setFragments(flow.initialFragments)
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBundle(PRESENTER_STATE_KEY, presenterDelegate.onSaveInstanceState())
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (needsInitialFragments) {
+            setFragments(flow.initialFragments)
+        }
     }
 
     override fun onResume() {
