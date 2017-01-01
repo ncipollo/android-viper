@@ -1,11 +1,8 @@
 package viper.view.activities
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
-import android.util.AttributeSet
-import android.view.View
 import nucleus.factory.PresenterFactory
 import nucleus.factory.ReflectionPresenterFactory
 import nucleus.view.PresenterLifecycleDelegate
@@ -19,19 +16,12 @@ import viper.routing.TransitionOptions
  * AppCompatActivity, as opposed to the standard Activity class.
  * Created by Nick Cipollo on 10/31/16.
  */
-abstract class ViperActivity<P : ActivityPresenter<*>>
+open class ViperActivity<P : ActivityPresenter<*>>
     : AppCompatActivity(), ViewWithPresenter<P>, ActivityView {
     private val PRESENTER_STATE_KEY = "presenter_state"
     private val presenterDelegate =
             PresenterLifecycleDelegate(ReflectionPresenterFactory.fromViewClass<P>(javaClass))
-    lateinit var flow: Flow
-        private set
     private var needsInitialFragments = false
-
-    /**
-     * Subclasses must override and create a flow for this activity.
-     */
-    abstract fun createFlow(): Flow
 
     /**
      * Sets the activity's fragments. By default this will add all fragments into a replace
@@ -69,7 +59,6 @@ abstract class ViperActivity<P : ActivityPresenter<*>>
         if (savedInstanceState != null) {
             presenterDelegate.onRestoreInstanceState(savedInstanceState.getBundle(PRESENTER_STATE_KEY))
         }
-        flow = createFlow()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -80,7 +69,7 @@ abstract class ViperActivity<P : ActivityPresenter<*>>
     override fun onStart() {
         super.onStart()
         if (needsInitialFragments) {
-            setFragments(flow.initialFragments)
+            setFragments(presenter.flow.initialFragments)
         }
     }
 
@@ -100,13 +89,13 @@ abstract class ViperActivity<P : ActivityPresenter<*>>
     }
 
     override fun moveToNextScreen(screenId: Int, arguments: Bundle) {
-        flow.intentForScreen(screenId, arguments, this)?.let {
+        presenter.flow.intentForScreen(screenId, arguments, this)?.let {
             startActivity(it, arguments)
             return
         }
         val args = Bundle(arguments)
-        setFragments(flow.fragmentsForScreen(screenId, args),
-                flow.optionsForScreenTransition(screenId, args))
+        setFragments(presenter.flow.fragmentsForScreen(screenId, args),
+                presenter.flow.optionsForScreenTransition(screenId, args))
     }
 
     override fun setPresenterFactory(presenterFactory: PresenterFactory<P>?) {

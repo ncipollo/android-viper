@@ -3,6 +3,7 @@ package viper.presenters
 import android.os.Bundle
 import nucleus.presenter.RxPresenter
 import rx.Observable
+import viper.routing.Flow
 import viper.view.activities.ActivityView
 
 /**
@@ -10,9 +11,21 @@ import viper.view.activities.ActivityView
  * layout and navigation.
  * Created by Nick Cipollo on 10/31/16.
  */
-open class ActivityPresenter<View : ActivityView> : RxPresenter<View>() {
+abstract class ActivityPresenter<View : ActivityView> : RxPresenter<View>() {
     companion object {
         val SCREEN_SWITCH = 10001
+    }
+    lateinit var flow: Flow
+        private set
+
+    /**
+     * Subclasses must override and create a flow for this activity.
+     */
+    abstract fun createFlow(): Flow
+
+    override fun onCreate(savedState: Bundle?) {
+        super.onCreate(savedState)
+        flow = createFlow()
     }
 
     /**
