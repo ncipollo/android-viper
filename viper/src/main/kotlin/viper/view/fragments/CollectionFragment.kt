@@ -9,7 +9,7 @@ import viper.view.adapters.CollectionAdapter
  * A generic collection fragment which is driven by a collection presenter.
  * Created by Nick Cipollo on 11/2/16.
  */
-abstract class CollectionFragment<P : CollectionPresenter<*, *>, A : CollectionAdapter<P>>
+abstract class CollectionFragment<P : CollectionPresenter<*, *, *>, A : CollectionAdapter<P>>
     : CollectionView, ViperFragment<P>() {
     private var actionSub: Subscription? = null
     lateinit var adapter: A
@@ -39,6 +39,6 @@ abstract class CollectionFragment<P : CollectionPresenter<*, *>, A : CollectionA
     }
 
     protected fun sendItemAction(actionId: Int, itemIndex: Int) {
-        (presenter as? CollectionPresenter<*, *>)?.onItemAction(actionId, itemIndex)
+        (presenter as? CollectionPresenter<*, *, *>)?.onItemAction(actionId, itemIndex)
     }
 }

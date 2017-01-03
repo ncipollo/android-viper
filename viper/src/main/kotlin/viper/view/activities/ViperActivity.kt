@@ -8,7 +8,6 @@ import nucleus.factory.ReflectionPresenterFactory
 import nucleus.view.PresenterLifecycleDelegate
 import nucleus.view.ViewWithPresenter
 import viper.presenters.ActivityPresenter
-import viper.routing.Flow
 import viper.routing.TransitionOptions
 
 /**
@@ -16,12 +15,14 @@ import viper.routing.TransitionOptions
  * AppCompatActivity, as opposed to the standard Activity class.
  * Created by Nick Cipollo on 10/31/16.
  */
-open class ViperActivity<P : ActivityPresenter<*>>
+open class ViperActivity<P : ActivityPresenter<*,*>>
     : AppCompatActivity(), ViewWithPresenter<P>, ActivityView {
     private val PRESENTER_STATE_KEY = "presenter_state"
     private val presenterDelegate =
             PresenterLifecycleDelegate(ReflectionPresenterFactory.fromViewClass<P>(javaClass))
     private var needsInitialFragments = false
+    override val args: Bundle
+        get() = intent?.extras ?: Bundle()
 
     /**
      * Sets the activity's fragments. By default this will add all fragments into a replace
@@ -70,6 +71,7 @@ open class ViperActivity<P : ActivityPresenter<*>>
         super.onStart()
         if (needsInitialFragments) {
             setFragments(presenter.flow.initialFragments)
+            needsInitialFragments = false
         }
     }
 

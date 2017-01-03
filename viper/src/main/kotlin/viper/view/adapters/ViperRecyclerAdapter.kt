@@ -1,5 +1,6 @@
 package viper.view.adapters
 
+import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +17,12 @@ import viper.presenters.CollectionPresenter
  */
 class ViperRecyclerAdapter<ListItem,
         VH : ViperViewHolder<ListItem>,
-        P : CollectionPresenter<*, ListItem>>(val vhBuilder: (ViewGroup, Int) -> VH)
+        P : CollectionPresenter<*, ListItem, *>>(val vhBuilder: (ViewGroup, Int) -> VH)
     : CollectionAdapter<P>, RecyclerView.Adapter<VH>() {
 
     constructor(vhBuilder: (ViewGroup) -> VH) : this({
-        parent,type -> vhBuilder(parent)
+        parent, type ->
+        vhBuilder(parent)
     })
 
     private val actionSubject: PublishSubject<AdapterAction> = PublishSubject.create<AdapterAction>()
@@ -30,8 +32,11 @@ class ViperRecyclerAdapter<ListItem,
 
     override var presenter: P? = null
 
-    override val activityPresenter: ActivityPresenter<*>?
+    override val activityPresenter: ActivityPresenter<*, *>?
         get() = presenter?.activityPresenter
+
+    override val args: Bundle
+        get() = presenter?.args ?: Bundle()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val vh = vhBuilder(parent, viewType)
@@ -59,6 +64,7 @@ class ViperRecyclerAdapter<ListItem,
  */
 open class ViperViewHolder<in ListItem>(val view: View) : RecyclerView.ViewHolder(view) {
     internal lateinit var actionSubject: PublishSubject<AdapterAction>
+
     constructor(layoutId: Int, parent: ViewGroup) : this(LayoutInflater.from(parent.context)
             .inflate(layoutId, parent, false))
 

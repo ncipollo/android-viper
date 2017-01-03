@@ -4,8 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import com.jakewharton.rxbinding.view.clicks
+import com.jakewharton.rxbinding.widget.editorActionEvents
+import com.jakewharton.rxbinding.widget.textChanges
 import kotlinx.android.synthetic.main.fragment_user.*
 import nucleus.factory.RequiresPresenter
+import rx.Observable
+import rx.lang.kotlin.addTo
+import rx.subscriptions.CompositeSubscription
 import viper.sample.R
 import viper.sample.ui.presenters.UserPresenter
 import viper.view.fragments.ViperFragment
@@ -15,7 +22,21 @@ import viper.view.fragments.ViperFragment
  * Created by Nick Cipollo on 12/16/16.
  */
 @RequiresPresenter(UserPresenter::class)
-class UserFragment : ViperFragment<UserPresenter>() {
+class UserFragment : UserView, ViperFragment<UserPresenter>() {
+    override var user: String
+        get() = userField.text.toString()
+        set(value) {
+            userField.setText(value)
+        }
+    override val onUserChanged: Observable<CharSequence>
+        get() = userField.textChanges()
+    override var doneEnabled: Boolean
+        get() = doneButton.isEnabled
+        set(value) {
+            doneButton.isEnabled = value
+        }
+    var subscriptions: CompositeSubscription? = null
+
     override fun onCreateView(inflater: LayoutInflater?,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -24,8 +45,14 @@ class UserFragment : ViperFragment<UserPresenter>() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        doneButton.setOnClickListener {
-            presenter.selectUser(userField.text.toString())
-        }
+        val subscriptions = CompositeSubscription()
+        this.subscriptions = subscriptions
+        userField.editorActionEvents()
+                .filter { it.actionId() == EditorInfo.IME_ACTION_DONE }
+                .subscribe { presenter.selectUser(userField.text.toString()) }
+                .addTo(subscriptions)
+        doneButton.clicks()
+                .subscribe { presenter.selectUser(userField.text.toString()) }
+                .addTo(subscriptions)
     }
 }

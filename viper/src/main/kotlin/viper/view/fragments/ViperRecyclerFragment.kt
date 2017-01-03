@@ -8,5 +8,5 @@ import viper.view.adapters.ViperRecyclerAdapter
  * expected to be a ViperRecyclerAdapter.
  * Created by Nick Cipollo on 12/21/16.
  */
-abstract class ViperRecyclerFragment<P : CollectionPresenter<*, *>>
-    : CollectionFragment<P,ViperRecyclerAdapter<*,*,P>>()
+abstract class ViperRecyclerFragment<P : CollectionPresenter<*, *, *>>
+    : CollectionFragment<P, ViperRecyclerAdapter<*, *, P>>()

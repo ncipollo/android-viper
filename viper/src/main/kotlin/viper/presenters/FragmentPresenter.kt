@@ -9,12 +9,34 @@ import viper.view.fragments.FragmentView
  * specific to the current use case displayed in the app.
  * Created by Nick Cipollo on 10/31/16.
  */
-open class FragmentPresenter<View : FragmentView> : RxPresenter<View>() {
-    var activityPresenter: ActivityPresenter<*>? = null
+open class FragmentPresenter<View : FragmentView, Interactors : Any> : RxPresenter<View>() {
+    var activityPresenter: ActivityPresenter<*, *>? = null
+    lateinit var interactors: Interactors
+        private set
+    lateinit var args: Bundle
+        private set
+
+    fun takeInteractors(interactors: Interactors) {
+        this.interactors = interactors
+        onTakeInteractors(interactors)
+    }
+
+    /**
+     * This method will be called when the interactors are passed into the presenter. This will
+     * occur each time the view is associated with the presenter. Subclasses may utilize this
+     * method to perform setup with the interactors.
+     */
+    open fun onTakeInteractors(interactors: Interactors) = Unit
 
     override fun onTakeView(view: View) {
         super.onTakeView(view)
+        args = view.args
         activityPresenter = view.activityPresenter
+        val interactors = activityPresenter?.interactors
+        if (interactors != null) {
+            @Suppress("UNCHECKED_CAST")
+            takeInteractors(interactors as Interactors)
+        }
     }
 
     override fun onDropView() {

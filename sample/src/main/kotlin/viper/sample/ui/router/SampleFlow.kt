@@ -1,4 +1,4 @@
-package viper.sample.ui.flow
+package viper.sample.ui.router
 
 import android.content.Context
 import android.content.Intent

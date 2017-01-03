@@ -11,22 +11,49 @@ import viper.view.activities.ActivityView
  * layout and navigation.
  * Created by Nick Cipollo on 10/31/16.
  */
-abstract class ActivityPresenter<View : ActivityView> : RxPresenter<View>() {
+abstract class ActivityPresenter<View : ActivityView, Interactors : Any> : RxPresenter<View>() {
     companion object {
         val SCREEN_SWITCH = 10001
     }
     lateinit var flow: Flow
         private set
-
+    lateinit var args: Bundle
+        private set
+    private var needsInteractors = true
+    lateinit var interactors: Interactors
+        private set
     /**
      * Subclasses must override and create a flow for this activity.
      */
     abstract fun createFlow(): Flow
 
+    abstract fun createInteractors(view: View): Interactors
+
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
         flow = createFlow()
     }
+
+    override fun onTakeView(view: View) {
+        super.onTakeView(view)
+        args = Bundle(view.args)
+        if(needsInteractors) {
+            interactors = createInteractors(view)
+            needsInteractors = false
+        }
+        takeInteractors(interactors)
+    }
+
+    fun takeInteractors(interactors: Interactors) {
+        onTakeInteractors(interactors)
+    }
+
+    /**
+     * This method will be called when the interactors are passed into the presenter. This will
+     * occur each time the view is associated with the presenter. Subclasses may utilize this
+     * method to perform setup with the interactors.
+     */
+    open fun onTakeInteractors(interactors: Interactors) = Unit
 
     /**
      * Moves to the next screen in the flow.
