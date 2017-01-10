@@ -7,7 +7,7 @@ import viper.view.fragments.CollectionView
  * A generic presenter which represents a collection of items on the screen.
  * Created by Nick Cipollo on 11/2/16.
  */
-abstract class CollectionPresenter<View : CollectionView, out ListItem, Interactors : Any>
+abstract class CollectionPresenter<View : CollectionView, ListItem, Interactors : Any>
     : FragmentPresenter<View, Interactors>() {
     companion object {
         val COLLECTION_UPDATE = 10001
@@ -33,4 +33,15 @@ abstract class CollectionPresenter<View : CollectionView, out ListItem, Interact
                 { view, noOp -> view?.onItemUpdated(itemIndex) })
         start(ITEM_UPDATE)
     }
+
+    internal fun positionMovedOnScreen(index: Int) {
+        onItemMovedOnScreen(getListItem(index), index)
+    }
+
+    internal fun positionMovedOffScreen(index: Int) {
+        onItemMovedOffScreen(getListItem(index), index)
+    }
+
+    open fun onItemMovedOnScreen(item: ListItem, index: Int) = Unit
+    open fun onItemMovedOffScreen(item: ListItem, index: Int) = Unit
 }

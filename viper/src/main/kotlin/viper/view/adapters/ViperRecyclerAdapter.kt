@@ -55,6 +55,22 @@ class ViperRecyclerAdapter<ListItem,
     override fun onCollectionUpdated() = notifyDataSetChanged()
 
     override fun onItemUpdated(itemIndex: Int) = notifyItemChanged(itemIndex)
+
+    override fun onViewAttachedToWindow(holder: VH) {
+        val index = holder.adapterPosition
+        if (index != RecyclerView.NO_POSITION) {
+            presenter?.positionMovedOnScreen(index)
+        }
+    }
+
+    override fun onViewDetachedFromWindow(holder: VH) {
+        val index = holder.adapterPosition
+        if (index != RecyclerView.NO_POSITION) {
+            presenter?.positionMovedOffScreen(index)
+        }
+    }
+
+
 }
 
 /**

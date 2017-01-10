@@ -1,6 +1,7 @@
 package viper.sample.ui.presenters
 
 import android.os.Bundle
+import android.util.Log
 import viper.presenters.CollectionPresenter
 import viper.sample.model.entities.Branch
 import viper.sample.model.entities.Commit
@@ -14,6 +15,7 @@ import viper.view.fragments.CollectionView
  * Created by Nick Cipollo on 12/24/16.
  */
 class CommitsPresenter : CollectionPresenter<CollectionView, CommitListItem, SampleInteractors>() {
+    val TAG = "CommitsPresenter"
     val commitList = mutableListOf<CommitListItem>()
     val repo: Repo
         get() = args.getParcelable(SampleFlow.ARGS_REPO)
@@ -39,6 +41,14 @@ class CommitsPresenter : CollectionPresenter<CollectionView, CommitListItem, Sam
     }
 
     override fun getListItem(index: Int): CommitListItem = commitList[index]
+
+    override fun onItemMovedOnScreen(item: CommitListItem, index: Int) {
+        Log.i(TAG,"+ Commit moved onscreen: $item")
+    }
+
+    override fun onItemMovedOffScreen(item: CommitListItem, index: Int) {
+        Log.i(TAG,"- Commit moved offscreen: $item")
+    }
 }
 
 data class CommitListItem(val sha: String, val author: String, val message: String) {
