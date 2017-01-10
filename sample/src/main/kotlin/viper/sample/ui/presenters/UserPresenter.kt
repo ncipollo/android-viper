@@ -14,9 +14,7 @@ import viper.sample.ui.router.SampleFlow
  */
 
 class UserPresenter : FragmentPresenter<UserView, SampleInteractors>() {
-    companion object {
-        val UPDATE_DONE_ENABLED = 1
-    }
+    val UPDATE_DONE_ENABLED = 1
     var userSub: Subscription? = null
 
     override fun onTakeView(view: UserView) {

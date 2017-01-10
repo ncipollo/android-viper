@@ -13,7 +13,7 @@ import viper.view.fragments.CollectionView
  * Created by Nick Cipollo on 12/19/16.
  */
 class RepoPresenter
-    : CollectionPresenter<CollectionView, RepoListItem, SampleInteractors>() {
+    : GitPresenter<RepoListItem, SampleInteractors>() {
     val repoList = mutableListOf<RepoListItem>()
     override val count: Int
         get() = repoList.size
@@ -21,6 +21,12 @@ class RepoPresenter
         get() = args.getString(SampleFlow.ARGS_USER)
 
     override fun onTakeInteractors(interactors: SampleInteractors) {
+        if (repoList.isEmpty()) {
+            refresh()
+        }
+    }
+
+    override fun onRefresh() {
         interactors.gitInteractor.fetchRepos(user)
                 .map { RepoListItem(it) }
                 .toList()
@@ -28,6 +34,7 @@ class RepoPresenter
                     repoList.clear()
                     repoList.addAll(it)
                     notifyCollectionUpdated()
+                    finishRefresh()
                 }
     }
 

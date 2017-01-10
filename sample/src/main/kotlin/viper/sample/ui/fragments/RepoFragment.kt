@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_repo.*
 import kotlinx.android.synthetic.main.item_repository.view.*
+import kotlinx.android.synthetic.main.layout_recycler.*
 import nucleus.factory.RequiresPresenter
 import viper.sample.R
 import viper.sample.ui.presenters.RepoListItem
@@ -20,20 +21,7 @@ import viper.view.fragments.ViperRecyclerFragment
  * Created by Nick Cipollo on 12/19/16.
  */
 @RequiresPresenter(RepoPresenter::class)
-class RepositoryFragment : ViperRecyclerFragment<RepoPresenter>() {
-
-    override fun onCreateView(inflater: LayoutInflater?,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_repo, container, false)
-    }
-
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = adapter
-    }
-
+class RepositoryFragment : SampleCollectionFragment<RepoPresenter>() {
     override fun createAdapter(): ViperRecyclerAdapter<*, *, RepoPresenter> {
         return ViperRecyclerAdapter(::RepoViewHolder)
     }

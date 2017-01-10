@@ -44,4 +44,6 @@ abstract class CollectionPresenter<View : CollectionView, ListItem, Interactors 
 
     open fun onItemMovedOnScreen(item: ListItem, index: Int) = Unit
     open fun onItemMovedOffScreen(item: ListItem, index: Int) = Unit
+    fun refresh() = onRefresh()
+    open protected fun onRefresh() = Unit
 }
