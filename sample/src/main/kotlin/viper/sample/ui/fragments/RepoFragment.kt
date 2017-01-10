@@ -21,7 +21,7 @@ import viper.view.fragments.ViperRecyclerFragment
  * Created by Nick Cipollo on 12/19/16.
  */
 @RequiresPresenter(RepoPresenter::class)
-class RepositoryFragment : SampleCollectionFragment<RepoPresenter>() {
+class RepositoryFragment : GitCollectionFragment<RepoPresenter>() {
     override fun createAdapter(): ViperRecyclerAdapter<*, *, RepoPresenter> {
         return ViperRecyclerAdapter(::RepoViewHolder)
     }

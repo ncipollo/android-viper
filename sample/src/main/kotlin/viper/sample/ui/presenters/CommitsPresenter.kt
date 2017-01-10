@@ -37,12 +37,14 @@ class CommitsPresenter : GitPresenter<CommitListItem, SampleInteractors>() {
         interactors.gitInteractor.fetchCommits(user, repo, Branch("master"))
                 .map(::CommitListItem)
                 .toList()
-                .subscribe {
+                .subscribe({
                     commitList.clear()
                     commitList.addAll(it)
                     notifyCollectionUpdated()
                     finishRefresh()
-                }
+                }, {
+                    showError(it)
+                })
     }
 
     override fun getListItem(index: Int): CommitListItem = commitList[index]

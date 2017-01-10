@@ -2,6 +2,7 @@ package viper.sample.ui.presenters
 
 import android.os.Bundle
 import rx.Observable
+import rx.lang.kotlin.onError
 import viper.presenters.CollectionPresenter
 import viper.sample.model.entities.Repo
 import viper.sample.model.interactors.SampleInteractors
@@ -30,12 +31,14 @@ class RepoPresenter
         interactors.gitInteractor.fetchRepos(user)
                 .map { RepoListItem(it) }
                 .toList()
-                .subscribe {
+                .subscribe({
                     repoList.clear()
                     repoList.addAll(it)
                     notifyCollectionUpdated()
                     finishRefresh()
-                }
+                }, {
+                    showError(it)
+                })
     }
 
     override fun getListItem(index: Int): RepoListItem = repoList[index]

@@ -3,9 +3,10 @@ package viper.sample.ui.fragments
 import viper.view.fragments.CollectionView
 
 /**
- * View which represents a collection view in the sample app.
+ * Represents a view which may display a collection of git items.
  * Created by Nick Cipollo on 1/10/17.
  */
-interface SampleCollectionView: CollectionView {
+interface GitCollectionView : CollectionView {
     fun finishRefresh()
+    fun onError(error:Throwable)
 }

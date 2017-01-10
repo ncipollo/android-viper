@@ -14,7 +14,7 @@ import viper.view.adapters.ViperViewHolder
  * Created by Nick Cipollo on 12/19/16.
  */
 @RequiresPresenter(CommitsPresenter::class)
-class CommitsFragment : SampleCollectionFragment<CommitsPresenter>() {
+class CommitsFragment : GitCollectionFragment<CommitsPresenter>() {
     override fun createAdapter(): ViperRecyclerAdapter<*, *, CommitsPresenter> {
         return ViperRecyclerAdapter(::CommitViewHolder)
     }
