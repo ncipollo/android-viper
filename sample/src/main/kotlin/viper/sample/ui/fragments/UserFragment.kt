@@ -1,10 +1,13 @@
 package viper.sample.ui.fragments
 
+import android.content.Context
+import android.hardware.input.InputManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import com.jakewharton.rxbinding.view.clicks
 import com.jakewharton.rxbinding.widget.editorActionEvents
 import com.jakewharton.rxbinding.widget.textChanges
@@ -49,10 +52,24 @@ class UserFragment : UserView, ViperFragment<UserPresenter>() {
         this.subscriptions = subscriptions
         userField.editorActionEvents()
                 .filter { it.actionId() == EditorInfo.IME_ACTION_DONE }
-                .subscribe { presenter.selectUser(userField.text.toString()) }
+                .subscribe { selectUser() }
                 .addTo(subscriptions)
         doneButton.clicks()
-                .subscribe { presenter.selectUser(userField.text.toString()) }
+                .subscribe { selectUser() }
                 .addTo(subscriptions)
+    }
+
+    fun selectUser() {
+        dismissKeyboard()
+        presenter.selectUser(userField.text.toString())
+    }
+
+    fun dismissKeyboard() {
+        val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE)
+                as InputMethodManager
+        val windowToken = view?.windowToken
+        if (windowToken != null) {
+            inputManager.hideSoftInputFromWindow(windowToken, 0)
+        }
     }
 }
