@@ -22,6 +22,8 @@ import viper.view.fragments.ViperRecyclerFragment
  */
 @RequiresPresenter(RepoPresenter::class)
 class RepositoryFragment : GitCollectionFragment<RepoPresenter>() {
+    override val layoutId: Int
+        get() = R.layout.fragment_repo
     override fun createAdapter(): ViperRecyclerAdapter<*, *, RepoPresenter> {
         return ViperRecyclerAdapter(::RepoViewHolder)
     }

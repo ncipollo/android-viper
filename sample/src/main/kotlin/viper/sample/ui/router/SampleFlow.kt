@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment
 import viper.routing.Flow
 import viper.routing.TransitionOptions
 import viper.sample.R
+import viper.sample.ui.fragments.BranchesFragment
 import viper.sample.ui.fragments.CommitsFragment
 import viper.sample.ui.fragments.RepositoryFragment
 import viper.sample.ui.fragments.UserFragment
@@ -19,8 +20,10 @@ class SampleFlow : Flow {
     companion object {
         val SCREEN_REPOS = 1
         val SCREEN_COMMITS = 2
+        val SCREEN_BRANCHES = 3
         val ARGS_USER = "user"
         val ARGS_REPO = "repo"
+        val ARGS_BRANCH = "branch"
     }
 
     override val initialFragments: Map<Int, Fragment>
@@ -41,6 +44,7 @@ class SampleFlow : Flow {
         val fragment = when (screen) {
             SCREEN_REPOS -> RepositoryFragment()
             SCREEN_COMMITS -> CommitsFragment()
+            SCREEN_BRANCHES -> BranchesFragment()
             else -> null
         }
         if (fragment != null) {

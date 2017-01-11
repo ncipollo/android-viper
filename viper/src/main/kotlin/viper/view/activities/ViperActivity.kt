@@ -100,6 +100,10 @@ open class ViperActivity<P : ActivityPresenter<*,*>>
                 presenter.flow.optionsForScreenTransition(screenId, args))
     }
 
+    override fun moveBack() {
+        supportFragmentManager?.popBackStack()
+    }
+
     override fun setPresenterFactory(presenterFactory: PresenterFactory<P>?) {
         presenterDelegate.presenterFactory = presenterFactory
     }

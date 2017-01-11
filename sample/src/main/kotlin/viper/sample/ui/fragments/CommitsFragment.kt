@@ -1,6 +1,10 @@
 package viper.sample.ui.fragments
 
+import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
+import com.jakewharton.rxbinding.view.clicks
+import kotlinx.android.synthetic.main.fragment_commits.*
 import kotlinx.android.synthetic.main.item_repository.view.*
 import nucleus.factory.RequiresPresenter
 import viper.sample.R
@@ -15,8 +19,20 @@ import viper.view.adapters.ViperViewHolder
  */
 @RequiresPresenter(CommitsPresenter::class)
 class CommitsFragment : GitCollectionFragment<CommitsPresenter>() {
+    override val layoutId: Int
+        get() = R.layout.fragment_commits
     override fun createAdapter(): ViperRecyclerAdapter<*, *, CommitsPresenter> {
         return ViperRecyclerAdapter(::CommitViewHolder)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        branchSelector.setOnClickListener { presenter.openBranchPicker() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        branchName.text = presenter.branch.name
     }
 }
 

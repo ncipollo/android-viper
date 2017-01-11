@@ -28,6 +28,11 @@ open class FragmentPresenter<View : FragmentView, Interactors : Any> : RxPresent
      */
     open fun onTakeInteractors(interactors: Interactors) = Unit
 
+    /**
+     * This method will be called when another presenter pops back to this one with arguments.
+     */
+    open fun onPresenterResult(arguments: Bundle) = Unit
+
     override fun onTakeView(view: View) {
         super.onTakeView(view)
         args = view.args
@@ -37,6 +42,9 @@ open class FragmentPresenter<View : FragmentView, Interactors : Any> : RxPresent
             @Suppress("UNCHECKED_CAST")
             takeInteractors(interactors as Interactors)
         }
+        // Handle the case were we are returning back from a presenter with results
+        val backArgs = activityPresenter?.claimBackArgs()
+        backArgs?.let { onPresenterResult(it) }
     }
 
     override fun onDropView() {
@@ -49,5 +57,12 @@ open class FragmentPresenter<View : FragmentView, Interactors : Any> : RxPresent
      */
     fun moveToNextScreen(screenId: Int, arguments: Bundle) {
         activityPresenter?.moveToNextScreen(screenId, arguments)
+    }
+
+    /**
+     * Moves back to the previous screen.
+     */
+    fun moveBack(arguments: Bundle? = null) {
+        activityPresenter?.moveBack(arguments)
     }
 }

@@ -1,26 +1,25 @@
 package viper.sample.ui.presenters
 
 import android.os.Bundle
-import rx.Observable
-import rx.lang.kotlin.onError
-import viper.presenters.CollectionPresenter
+import viper.sample.model.entities.Branch
 import viper.sample.model.entities.Repo
 import viper.sample.model.interactors.SampleInteractors
 import viper.sample.ui.router.SampleFlow
-import viper.view.fragments.CollectionView
 
 /**
  * Presents a list of GitHub repositories.
  * Created by Nick Cipollo on 12/19/16.
  */
-class RepoPresenter
-    : GitPresenter<RepoListItem, SampleInteractors>() {
+class BranchesPresenter
+    : GitPresenter<BranchListItem, SampleInteractors>() {
     val user: String
         get() = args.getString(SampleFlow.ARGS_USER)
+    val repo: Repo
+        get() = args.getParcelable(SampleFlow.ARGS_REPO)
 
     override fun onRefresh() {
-        interactors.gitInteractor.fetchRepos(user)
-                .map { RepoListItem(it) }
+        interactors.gitInteractor.fetchBranches(user,repo)
+                .map { BranchListItem(it) }
                 .toList()
                 .subscribe({
                     itemList.clear()
@@ -34,13 +33,10 @@ class RepoPresenter
 
     override fun onItemAction(actionId: Int, itemIndex: Int) {
         val args = Bundle()
-        args.putString(SampleFlow.ARGS_USER, user)
-        args.putParcelable(SampleFlow.ARGS_REPO, itemList[itemIndex].repo)
-        args.putParcelable(SampleFlow.ARGS_BRANCH,itemList[itemIndex].repo.defaultBranch)
-        moveToNextScreen(SampleFlow.SCREEN_COMMITS, args)
+        args.putParcelable(SampleFlow.ARGS_BRANCH,itemList[itemIndex].branch)
+        moveBack(args)
     }
 }
 
-data class RepoListItem(val repo: Repo,
-                        val title: String = repo.name,
-                        val description: String = repo.description ?: "")
+data class BranchListItem(val branch: Branch,
+                          val title: String = branch.name)

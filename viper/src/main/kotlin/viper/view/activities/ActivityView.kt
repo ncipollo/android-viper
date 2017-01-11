@@ -8,6 +8,7 @@ import android.os.Bundle
  */
 interface ActivityView {
     fun moveToNextScreen(screenId: Int, arguments: Bundle)
+    fun moveBack()
     /**
      * Returns the argument bundle which was provided to the view.
      */

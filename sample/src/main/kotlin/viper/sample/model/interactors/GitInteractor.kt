@@ -26,11 +26,13 @@ class GitInteractor @Inject constructor(val api: GitHubAPI) {
     }
 
     fun fetchBranches(user: String, repo: Repo): Observable<Branch> {
-        return Observable.just(Branch("master"), Branch("feature/something-amazing"))
+        return api.listBranches(user,repo.name)
+                .flatMap { Observable.from(it) }
+                .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun fetchCommits(user: String, repo: Repo, branch: Branch): Observable<Commit> {
-        return api.listCommits(user,repo.name)
+        return api.listCommits(user,repo.name,branch.name)
                 .flatMap { Observable.from(it) }
                 .observeOn(AndroidSchedulers.mainThread())
     }

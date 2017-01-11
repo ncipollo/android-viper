@@ -14,32 +14,24 @@ import viper.sample.ui.router.SampleFlow
  */
 class CommitsPresenter : GitPresenter<CommitListItem, SampleInteractors>() {
     val TAG = "CommitsPresenter"
-    val commitList = mutableListOf<CommitListItem>()
     val repo: Repo
         get() = args.getParcelable(SampleFlow.ARGS_REPO)
     val user: String
         get() = args.getString(SampleFlow.ARGS_USER)
+    val branch: Branch
+        get() = args.getParcelable(SampleFlow.ARGS_BRANCH)
 
     override fun onCreate(savedState: Bundle?) {
         super.onCreate(savedState)
     }
 
-    override val count: Int
-        get() = commitList.size
-
-    override fun onTakeInteractors(interactors: SampleInteractors) {
-        if (commitList.isEmpty()) {
-            refresh()
-        }
-    }
-
     override fun onRefresh() {
-        interactors.gitInteractor.fetchCommits(user, repo, Branch("master"))
+        interactors.gitInteractor.fetchCommits(user, repo, branch)
                 .map(::CommitListItem)
                 .toList()
                 .subscribe({
-                    commitList.clear()
-                    commitList.addAll(it)
+                    itemList.clear()
+                    itemList.addAll(it)
                     notifyCollectionUpdated()
                     finishRefresh()
                 }, {
@@ -47,14 +39,26 @@ class CommitsPresenter : GitPresenter<CommitListItem, SampleInteractors>() {
                 })
     }
 
-    override fun getListItem(index: Int): CommitListItem = commitList[index]
-
     override fun onItemMovedOnScreen(item: CommitListItem, index: Int) {
-        Log.i(TAG, "+ Commit moved onscreen: $item")
+        Log.d(TAG, "+ Commit moved onscreen: $item")
     }
 
     override fun onItemMovedOffScreen(item: CommitListItem, index: Int) {
-        Log.i(TAG, "- Commit moved offscreen: $item")
+        Log.d(TAG, "- Commit moved offscreen: $item")
+    }
+
+    fun openBranchPicker() {
+        val args = Bundle()
+        args.putString(SampleFlow.ARGS_USER, user)
+        args.putParcelable(SampleFlow.ARGS_REPO, repo)
+        moveToNextScreen(SampleFlow.SCREEN_BRANCHES, args)
+    }
+
+    override fun onPresenterResult(arguments: Bundle) {
+        super.onPresenterResult(arguments)
+        args.putParcelable(SampleFlow.ARGS_BRANCH,
+                arguments.getParcelable(SampleFlow.ARGS_BRANCH))
+        refresh()
     }
 }
 

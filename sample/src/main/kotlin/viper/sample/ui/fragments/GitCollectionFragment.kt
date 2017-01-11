@@ -18,10 +18,12 @@ import viper.view.fragments.ViperRecyclerFragment
 abstract class GitCollectionFragment<P : CollectionPresenter<*, *, *>>
     : GitCollectionView, ViperRecyclerFragment<P>() {
 
+    abstract val layoutId: Int
+
     override fun onCreateView(inflater: LayoutInflater?,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater?.inflate(R.layout.fragment_repo, container, false)
+        return inflater?.inflate(layoutId, container, false)
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

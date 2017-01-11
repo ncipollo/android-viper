@@ -2,6 +2,7 @@ package viper.sample.ui.presenters
 
 import rx.Observable
 import viper.presenters.CollectionPresenter
+import viper.sample.model.interactors.SampleInteractors
 import viper.sample.ui.fragments.GitCollectionView
 import viper.view.fragments.CollectionView
 
@@ -13,6 +14,17 @@ abstract class GitPresenter<ListItem, Interactors : Any>
     : CollectionPresenter<GitCollectionView,ListItem,Interactors>() {
     val FINISH_REFRESHING_ID = 1
     val SHOW_ERROR = 2
+    protected val itemList = mutableListOf<ListItem>()
+    override val count: Int
+        get() = itemList.size
+
+    override fun getListItem(index: Int): ListItem = itemList[index]
+
+    override fun onTakeInteractors(interactors: Interactors) {
+        if (itemList.isEmpty()) {
+            refresh()
+        }
+    }
 
     fun finishRefresh() {
         stop(FINISH_REFRESHING_ID)

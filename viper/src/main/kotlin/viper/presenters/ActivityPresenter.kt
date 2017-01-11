@@ -14,7 +14,9 @@ import viper.view.activities.ActivityView
 abstract class ActivityPresenter<View : ActivityView, Interactors : Any> : RxPresenter<View>() {
     companion object {
         val SCREEN_SWITCH = 10001
+        val POP_BACK = 10002
     }
+
     lateinit var flow: Flow
         private set
     lateinit var args: Bundle
@@ -22,6 +24,7 @@ abstract class ActivityPresenter<View : ActivityView, Interactors : Any> : RxPre
     private var needsInteractors = true
     lateinit var interactors: Interactors
         private set
+    private var backArgs: Bundle? = null
     /**
      * Subclasses must override and create a flow for this activity.
      */
@@ -37,7 +40,7 @@ abstract class ActivityPresenter<View : ActivityView, Interactors : Any> : RxPre
     override fun onTakeView(view: View) {
         super.onTakeView(view)
         args = Bundle(view.args)
-        if(needsInteractors) {
+        if (needsInteractors) {
             interactors = createInteractors(view)
             needsInteractors = false
         }
@@ -69,6 +72,28 @@ abstract class ActivityPresenter<View : ActivityView, Interactors : Any> : RxPre
                             params.arguments)
                 })
         start(SCREEN_SWITCH)
+    }
+
+    /**
+     * Moves to the previous screen.
+     */
+    fun moveBack(arguments: Bundle? = null) {
+        stop(POP_BACK)
+        restartableFirst(POP_BACK,
+                {
+                    Observable.just(arguments)
+                },
+                { view, args ->
+                    backArgs = args
+                    view?.moveBack()
+                })
+        start(POP_BACK)
+    }
+
+    internal fun claimBackArgs(): Bundle? {
+        val args = backArgs
+        backArgs = null
+        return args
     }
 
     data class ScreenSwitchParams(val screenId: Int,
