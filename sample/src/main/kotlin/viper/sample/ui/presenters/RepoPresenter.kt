@@ -53,4 +53,4 @@ class RepoPresenter
 
 data class RepoListItem(val repo: Repo,
                         val title: String = repo.name,
-                        val description: String = repo.description)
+                        val description: String = repo.description ?: "")

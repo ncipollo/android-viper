@@ -9,7 +9,7 @@ import android.os.Parcelable
  */
 
 data class Repo(val name: String,
-                val description: String = "") : Parcelable {
+                val description: String?) : Parcelable {
     companion object {
         @Suppress("unused")
         @JvmField val CREATOR: Parcelable.Creator<Repo> = object : Parcelable.Creator<Repo> {
