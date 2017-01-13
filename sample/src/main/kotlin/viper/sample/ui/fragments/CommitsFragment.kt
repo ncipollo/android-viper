@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding.view.clicks
 import kotlinx.android.synthetic.main.fragment_commits.*
+import kotlinx.android.synthetic.main.item_commit.view.*
 import kotlinx.android.synthetic.main.item_repository.view.*
 import nucleus.factory.RequiresPresenter
 import viper.sample.R
@@ -37,9 +38,11 @@ class CommitsFragment : GitCollectionFragment<CommitsPresenter>() {
 }
 
 class CommitViewHolder(parent: ViewGroup)
-    : ViperViewHolder<CommitListItem>(R.layout.item_repository, parent) {
+    : ViperViewHolder<CommitListItem>(R.layout.item_commit, parent) {
     override fun bindListItem(item: CommitListItem) {
-        view.name.text = item.message
+        view.message.text = item.message
+        view.author.text = item.author
+        view.sha.text = item.shortSha
         view.setOnClickListener {
             sendAction()
         }

@@ -10,6 +10,10 @@ import kotlinx.android.synthetic.main.layout_recycler.*
 import viper.presenters.CollectionPresenter
 import viper.sample.R
 import viper.view.fragments.ViperRecyclerFragment
+import viper.sample.R.id.recyclerView
+import android.support.v7.widget.DividerItemDecoration
+
+
 
 /**
  * Base fragment for managing results of the git api in the sample app.
@@ -28,8 +32,12 @@ abstract class GitCollectionFragment<P : CollectionPresenter<*, *, *>>
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager =  layoutManager
         recyclerView.adapter = adapter
+        val divider = DividerItemDecoration(recyclerView.context,
+                layoutManager.orientation)
+        recyclerView.addItemDecoration(divider)
         refreshLayout.setOnRefreshListener {
             presenter.refresh()
         }

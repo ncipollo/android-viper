@@ -62,8 +62,15 @@ class CommitsPresenter : GitPresenter<CommitListItem, SampleInteractors>() {
     }
 }
 
-data class CommitListItem(val sha: String, val author: String, val message: String) {
+data class CommitListItem(val sha: String,
+                          val author: String,
+                          val message: String) {
     constructor(commit: Commit) : this(commit.sha.orEmpty(),
             commit.login,
             commit.message)
+    val shortSha: String
+        get() {
+            val length = Math.min(sha.length,7)
+            return sha.substring(0..length)
+        }
 }

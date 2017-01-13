@@ -14,6 +14,6 @@
         android:layout_centerVertical="true"
         android:maxLines="1"
         android:ellipsize="end"
-        style="@style/TextAppearance.AppCompat.Subhead"/>
+        style="@style/item_text_title"/>
 
 </RelativeLayout>
