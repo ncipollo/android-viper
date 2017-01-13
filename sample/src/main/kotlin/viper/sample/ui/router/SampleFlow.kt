@@ -9,7 +9,7 @@ import viper.routing.TransitionOptions
 import viper.sample.R
 import viper.sample.ui.fragments.BranchesFragment
 import viper.sample.ui.fragments.CommitsFragment
-import viper.sample.ui.fragments.RepositoryFragment
+import viper.sample.ui.fragments.ReposFragment
 import viper.sample.ui.fragments.UserFragment
 
 /**
@@ -42,7 +42,7 @@ class SampleFlow : Flow {
 
     override fun fragmentsForScreen(screen: Int, args: Bundle): Map<Int, Fragment> {
         val fragment = when (screen) {
-            SCREEN_REPOS -> RepositoryFragment()
+            SCREEN_REPOS -> ReposFragment()
             SCREEN_COMMITS -> CommitsFragment()
             SCREEN_BRANCHES -> BranchesFragment()
             else -> null

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.layout_recycler.*
 import nucleus.factory.RequiresPresenter
 import viper.sample.R
 import viper.sample.ui.presenters.RepoListItem
-import viper.sample.ui.presenters.RepoPresenter
+import viper.sample.ui.presenters.ReposPresenter
 import viper.view.adapters.ViperRecyclerAdapter
 import viper.view.adapters.ViperViewHolder
 import viper.view.fragments.ViperRecyclerFragment
@@ -20,11 +20,11 @@ import viper.view.fragments.ViperRecyclerFragment
  * Fragment which displays GitHub repositories.
  * Created by Nick Cipollo on 12/19/16.
  */
-@RequiresPresenter(RepoPresenter::class)
-class RepositoryFragment : GitCollectionFragment<RepoPresenter>() {
+@RequiresPresenter(ReposPresenter::class)
+class ReposFragment : GitCollectionFragment<ReposPresenter>() {
     override val layoutId: Int
         get() = R.layout.fragment_repo
-    override fun createAdapter(): ViperRecyclerAdapter<*, *, RepoPresenter> {
+    override fun createAdapter(): ViperRecyclerAdapter<*, *, ReposPresenter> {
         return ViperRecyclerAdapter(::RepoViewHolder)
     }
 }

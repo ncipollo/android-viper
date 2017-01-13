@@ -13,7 +13,7 @@ import viper.view.fragments.CollectionView
  * Presents a list of GitHub repositories.
  * Created by Nick Cipollo on 12/19/16.
  */
-class RepoPresenter
+class ReposPresenter
     : GitPresenter<RepoListItem, SampleInteractors>() {
     val user: String
         get() = args.getString(SampleFlow.ARGS_USER)
