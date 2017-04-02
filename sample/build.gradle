@@ -34,7 +34,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.6'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.1'
     }
 }
 kapt {
@@ -45,17 +45,17 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:design:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
     testCompile 'junit:junit:4.12'
     // Kotlin
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.6'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.1'
     // Dagger 2 Injection Library
     compile 'com.google.dagger:dagger:2.2'
     kapt 'com.google.dagger:dagger-compiler:2.2'
     // Retrofit HTTP / Rest Library
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     // RxJava
     compile 'io.reactivex:rxjava:1.1.6'

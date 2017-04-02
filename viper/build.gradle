@@ -31,7 +31,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.6'
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.1'
     }
 }
 
@@ -41,10 +41,10 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
     // Kotlin
-    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.0.6'
+    compile 'org.jetbrains.kotlin:kotlin-stdlib:1.1.1'
     // Nucleus
     compile 'info.android15.nucleus:nucleus:4.0.0'
 }
